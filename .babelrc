@@ -1,0 +1,21 @@
+{
+  "plugins": [
+    "dynamic-import-node", ["transform-runtime", {
+      "helpers": false,
+      "polyfill": false,
+      "regenerator": true,
+      "moduleName": "babel-runtime"
+    }]
+  ],
+  "presets": [
+    "es2015",
+    [
+      "env",
+      {
+        "targets": {
+          "node": "current"
+        }
+      }
+    ], "stage-0", "stage-2"
+  ]
+}
