@@ -23,7 +23,7 @@ const publish = async ({
       }
     }
   }
-}, cxt) => {
+}, res, cxt) => {
 
   const {workspace} = cxt;
   const folder = path.join(workspace, 'features', featureid, 'iterations', iterationid.toString(), 'modules', moduleid);
@@ -65,7 +65,7 @@ const publish = async ({
     ? "--prod"
     : "";
 
-  await exec(['yarn install ' + modeInstall], {
+  await exec(['yarn install'], {
     cwd: repositoryFolder
   }, {}, cxt);
 
@@ -154,11 +154,27 @@ export const routes = async (app, cxt) => {
     console.log(JSON.stringify(req.body, null, 2));
 
     try {
-      await publish(req.body, cxt);
 
-      res.json({success: true, message: "NPM package published"});
-    } catch (e) {
-      res.json({error: e.toString()});
-    }
+      res.writeHead(200, {'Content-Type': 'text/plain'});
+
+      res.write("START NPM PUBLISH");
+      await wait(2000);
+      res.write("1 NPM PUBLISH");
+      await wait(2000);
+      res.write("2 NPM PUBLISH");
+      await wait(2000);
+      res.write("3 NPM PUBLISH");
+      await wait(2000);
+      res.write("4 NPM PUBLISH");
+      await wait(2000);
+
+      await publish(req.body, res, cxt);
+
+      //res.json({success: true, message: "NPM package published"});
+    } finally {
+      res.end();
+    }/*catch (e) {
+      //res.json({error: e.toString()});
+    }*/
   });
 }

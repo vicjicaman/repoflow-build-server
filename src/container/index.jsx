@@ -40,6 +40,7 @@ const publish = async ({
     cwd: repositoryFolder
   }, {}, cxt);
 
+
   await exec(['git checkout ' + commitid], {
     cwd: repositoryFolder
   }, {}, cxt);
@@ -47,26 +48,37 @@ const publish = async ({
     ? "--prod"
     : "";
 
+  console.log("INSTALL APP");
   await exec(['yarn install ' + modeInstall], {
     cwd: repositoryFolder
   }, {}, cxt);
 
+  console.log("BUILD IMAGE");
   await exec(['docker build . -t ' + fullname + ':' + version], {
     cwd: repositoryFolder
   }, {}, cxt);
 
+
+  console.log("LOGIN IN AWS");
   const awsout = await exec(['aws ecr get-login --no-include-email --region us-east-1'], {
     cwd: repositoryFolder
   }, {}, cxt);
 
-  await exec([awsout.stdout], {
+  console.log(awsout);
+
+  const loginout = await exec([awsout.stdout], {
     cwd: repositoryFolder
   }, {}, cxt);
 
+  console.log(loginout);
+
+  console.log("CHECK REPOSITORY IMAGE");
   try {
-    await exec(['aws ecr list-images --repository-name ' + moduleid], {
+    const checkout = await exec(['aws ecr list-images --repository-name ' + moduleid], {
       cwd: repositoryFolder
     }, {}, cxt);
+
+    console.log(checkout);
 
   } catch (e) {
 
@@ -82,6 +94,8 @@ const publish = async ({
 
   }
 
+  console.log("PUSH IMAGE IN REPO");
+  console.log('docker push ' + fullname + ':' + version);
   const cmdout = await exec(['docker push ' + fullname + ':' + version], {
     cwd: repositoryFolder
   }, {}, cxt);
@@ -94,42 +108,43 @@ const publish = async ({
 }
 
 export const routes = async (app, cxt) => {
-  console.log("Register container routes");
+  console.log("Register container test routes");
 
   app.get('/build/test/container', async (req, res) => {
 
-    const params = JSON.parse(` {
-      "module" : {
-        "moduleid": "repoflow-container-graph",
-        "mode": "dev",
-        "version": "1.1.3-local-ui-graph-dev",
-        "type": "container",
-        "fullname": "919446158824.dkr.ecr.us-east-1.amazonaws.com/repoflow-container-graph",
+    const params = JSON.parse(`{
+  "module": {
+    "moduleid": "repoflow-container-graph",
+    "mode": "dev",
+    "version": "1.1.7-local-ui-graph-dev",
+    "type": "container",
+    "fullname": "919446158824.dkr.ecr.us-east-1.amazonaws.com/repoflow-container-graph",
+    "repository": {
+      "url": "github.com:vicjicaman/repoflow-container-graph.git",
+      "commitid": "b288ffb162152203663a8331e34b7eb01143b377",
+      "message": "Move request error to event waiter"
+    },
+    "release": true,
+    "id": "repoflow.com_local-ui-graph_19_repoflow-container-graph",
+    "iteration": {
+      "iterationid": 19,
+      "feature": {
+        "featureid": "local-ui-graph",
         "repository": {
-          "url": "github.com:vicjicaman/repoflow-container-graph.git",
-          "commitid": "bc2658404952fbcb081380d88233ea8d4d845363",
-          "message": "Sync to the latest iteration version"
-        },
-        "release": true,
-        "id": "repoflow.com_local-ui-graph_15_repoflow-container-graph",
-        "iteration": {
-          "iterationid": 15,
-          "feature": {
-            "featureid": "local-ui-graph",
-            "repository": {
-              "baselineid": "master",
-              "branchid": "local-ui-graph/master",
-              "instance": {
-                "instanceid": "local-ui-graph-master",
-                "namespaceid": {
-                  "namespaceid": "repoflow.com"
-                }
-              }
+          "baselineid": "master",
+          "branchid": "local-ui-graph/master",
+          "instance": {
+            "instanceid": "local-ui-graph-master",
+            "namespaceid": {
+              "namespaceid": "repoflow.com"
             }
           }
         }
       }
-    }`);
+    }
+  },
+  "outputPath": "/home/victor/nodeflow/workspace/namespaces/repoflow.com/instances/local-ui-graph-master/plugins/iterations/19/modules/repoflow-container-graph/container"
+}`);
 
     try {
       await publish(params, cxt);
