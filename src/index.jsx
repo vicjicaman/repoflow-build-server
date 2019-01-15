@@ -11,7 +11,10 @@ import * as HandlerContainerNPM from './container'
 console.log(JSON.stringify(process.env, null, 2));
 
 const service_port = process.env.SERVICE_PORT || 8000;
-const workspace = path.join(process.env.REPOFLOW_WORKSPACE || "/home/victor/workspace", "build");
+const workspace = path.join(process.env.REPOFLOW_WORKSPACE || "/home/victor/nodeflow/workspace", "build");
+
+console.log("REPOFLOW_WORKSPACE: " + process.env.REPOFLOW_WORKSPACE);
+console.log(workspace);
 
 const name = "build-node";
 const logger = Logger({name});

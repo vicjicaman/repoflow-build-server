@@ -20,6 +20,8 @@ export const init = async ({
   } catch (e) {}
 
   await exec(['mkdir -p ' + folder], {}, {}, cxt);
+  console.log("FOLDER: " + folder);
+
   await exec(['git clone git@' + url + " " + repositoryFolder], {}, {}, cxt);
 
   await exec(['git fetch origin -- ' + branchid], {

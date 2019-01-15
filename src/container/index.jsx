@@ -18,16 +18,16 @@ export const routes = async (app, cxt) => {
       const params = req.body;
       const {moduleid, mode, version, fullname} = params;
 
-      const {folder} = await Repository.init(params, {
+      const {folder: repositoryFolder} = await Repository.init(params, {
         type
       }, cxt);
 
       const modeInstall = mode === "prod"
-        ? "--prod"
-        : "";
+        ? "--production=true"
+        : "--production=false";
 
       console.log("INSTALL APP");
-      await exec(['yarn install ' + modeInstall], {
+      await exec(['yarn install --ignore-scripts ' + modeInstall], {
         cwd: repositoryFolder
       }, {}, cxt);
 
