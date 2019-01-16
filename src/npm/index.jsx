@@ -39,8 +39,8 @@ export const routes = async (app, cxt) => {
       }
 
       console.log("NPM INSTALL");
-      console.log('yarn install --ignore-scripts --production=false');
-      await exec(['yarn install --ignore-scripts --production=false'], {
+      console.log('yarn install --production=false');
+      await exec(['yarn install --production=false'], {
         cwd: repositoryFolder
       }, {}, cxt);
 
