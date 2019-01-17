@@ -1,11 +1,11 @@
 {
   "name": "@nebulario/repoflow-build-server",
-  "version": "1.0.0-build-server-services-dev",
+  "version": "1.0.1-build-server-services-dev",
   "description": "Base for modules in node",
   "main": "./dist/index.js",
   "repository": "github.com:vicjicaman/repoflow-build-server.git",
   "author": "Victor Jimenez <vic@nodeflow.io>",
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "devDependencies": {
     "autoprefixer": "^7.2.3",
     "babel-cli": "^6.26.0",
