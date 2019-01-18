@@ -2,7 +2,7 @@ import path from 'path'
 import {exec, retry, wait} from '@nebulario/core-process';
 
 export const init = async ({
-  keyPath,
+  folder: relativeFolder,
   moduleid,
   url,
   branchid,
@@ -12,7 +12,7 @@ export const init = async ({
 }, cxt) => {
 
   const {workspace} = cxt;
-  const folder = path.join(workspace, type, keyPath, moduleid);
+  const folder = path.join(workspace, type, relativeFolder, moduleid);
   const repositoryFolder = path.join(folder, "repository");
 
   try {
