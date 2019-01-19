@@ -41,20 +41,35 @@ export const artifact = async ({
   folder: repositoryFolder
 }, cxt) => {
 
+  console.log("ADD ARTIFACT CHANGES");
+  const {stdout: status} = await exec(['git status --porcelain'], {
+    cwd: repositoryFolder
+  }, {}, cxt);
+
+  if (status === "") {
+    return false;
+  }
+
+  console.log("ADD ARTIFACT CHANGES");
   await exec(['git add .'], {
     cwd: repositoryFolder
   }, {}, cxt);
 
+  console.log("GENERATE ARTIFACT CHANGES");
   await exec(['git checkout -b ' + artifactid], {
     cwd: repositoryFolder
   }, {}, cxt);
 
+  console.log("COMMIT ARTIFACT CHANGES");
   await exec(['git commit -m "Publish artifact modifications"'], {
     cwd: repositoryFolder
   }, {}, cxt);
 
+  console.log("PUSH CHANGES");
   await exec(['git push --set-upstream origin ' + artifactid], {
     cwd: repositoryFolder
   }, {}, cxt);
+
+  return true;
 
 }
