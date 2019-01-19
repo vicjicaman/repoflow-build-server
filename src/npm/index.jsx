@@ -14,7 +14,7 @@ export const routes = async (app, cxt) => {
       //res.writeHead(200, {'Content-Type': 'text/plain'});
       const params = req.body;
 
-      const {moduleid, mode, version, fullname} = params;
+      const {moduleid, mode, version, fullname, artifactid} = params;
 
       const {folder: repositoryFolder} = await Repository.init(params, {
         type
@@ -74,6 +74,11 @@ export const routes = async (app, cxt) => {
 
       console.log("NPM PACKAGE PUBLISHED");
       await wait(2500); // Wait for package propagation
+
+      // generate the artifact branch, this branch is expected to be merged into master in order to continue the flow
+      await Repository.artifactid(params, {
+        folder: repositoryFolder
+      }, cxt);
 
       console.log("START PUBLISH");
       console.log(out.stdout);

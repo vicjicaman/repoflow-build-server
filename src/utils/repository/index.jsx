@@ -34,3 +34,27 @@ export const init = async ({
 
   return {folder: repositoryFolder};
 }
+
+export const artifact = async ({
+  artifactid
+}, {
+  folder: repositoryFolder
+}, cxt) => {
+
+  await exec(['git add .'], {
+    cwd: repositoryFolder
+  }, {}, cxt);
+
+  await exec(['git checkout -b ' + artifactid], {
+    cwd: repositoryFolder
+  }, {}, cxt);
+
+  await exec(['git commit -m "Publish artifact modifications"'], {
+    cwd: repositoryFolder
+  }, {}, cxt);
+
+  await exec(['git push --set-upstream origin ' + artifactid], {
+    cwd: repositoryFolder
+  }, {}, cxt);
+
+}

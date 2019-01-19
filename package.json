@@ -1,6 +1,6 @@
 {
   "name": "@nebulario/repoflow-build-server",
-  "version": "1.0.2-build-server-services-dev",
+  "version": "1.0.3-build-server-services-dev",
   "description": "Base for modules in node",
   "main": "./dist/index.js",
   "repository": "github.com:vicjicaman/repoflow-build-server.git",
@@ -48,7 +48,7 @@
   "dependencies": {
     "@nebulario/core-logger": "1.1.2-local-ui-graph-prod",
     "@nebulario/core-node": "1.0.0-master",
-    "@nebulario/core-process": "^1.1.2-local-ui-graph-prod"
+    "@nebulario/core-process": "1.1.41-master"
   },
   "peerDependencies": {}
 }
