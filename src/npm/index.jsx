@@ -14,7 +14,7 @@ export const routes = async (app, cxt) => {
       //res.writeHead(200, {'Content-Type': 'text/plain'});
       const params = req.body;
 
-      const {moduleid, mode, version, fullname, artifactid} = params;
+      const {moduleid, mode, version, fullname} = params;
 
       const {folder: repositoryFolder} = await Repository.init(params, {
         type
@@ -33,31 +33,30 @@ export const routes = async (app, cxt) => {
         }
       } catch (e) {}
 
+      console.log("NPM INSTALL");
+      console.log('yarn install --production=false');
+      await exec(['yarn install --production=false'], {
+        cwd: repositoryFolder
+      }, {}, cxt);
+
+      console.log("NPM BUILD");
+      console.log('yarn build:' + mode);
+      const buildOut = await exec(['yarn build:' + mode], {
+        cwd: repositoryFolder
+      }, {}, cxt);
+
+      console.log("START BUILD");
+      console.log(buildOut.stdout);
+      console.log(buildOut.stderr);
+      console.log("FINISH BUILD");
+
       if (ready) {
-
-        console.log("NPM INSTALL");
-        console.log('yarn install --production=false');
-        await exec(['yarn install --production=false'], {
-          cwd: repositoryFolder
-        }, {}, cxt);
-
-        console.log("NPM BUILD");
-        console.log('yarn build:' + mode);
-        const buildOut = await exec(['yarn build:' + mode], {
-          cwd: repositoryFolder
-        }, {}, cxt);
-
-        console.log("START BUILD");
-        console.log(buildOut.stdout);
-        console.log(buildOut.stderr);
-        console.log("FINISH BUILD");
-
         console.log("NPM PUBLISHED");
         const out = await retry(async i => await exec(['yarn publish --ignore-scripts --new-version=' + version], {
           cwd: repositoryFolder
         }, {}, cxt), (re, i, time) => {
 
-          console.log("NPM FAILED PUBLISH");
+          console.log("NPM FAILED PUBLISH.");
           console.log(re.stdout);
           console.log(re.stderr);
 
@@ -73,15 +72,13 @@ export const routes = async (app, cxt) => {
       console.log("NPM PACKAGE PUBLISHED");
       await wait(2500); // Wait for package propagation
 
-      // generate the artifact branch, this branch is expected to be merged into master in order to continue the flow
-      const artifact = await Repository.artifact(params, {
+      const repository = await Repository.publish(params, {
         folder: repositoryFolder
       }, cxt);
 
-      console.log("ARTIFACT CHANGES: " + artifact);
       console.log("FINISH PUBLISH");
 
-      res.json({success: true, message: "NPM package published", artifact});
+      res.json({success: true, message: "NPM package published"});
     } catch (e) {
       res.json({error: e.toString()});
     } finally {

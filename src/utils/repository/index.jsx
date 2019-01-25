@@ -5,8 +5,7 @@ export const init = async ({
   folder: relativeFolder,
   moduleid,
   url,
-  branchid,
-  commitid
+  branchid
 }, {
   type
 }, cxt) => {
@@ -28,15 +27,15 @@ export const init = async ({
     cwd: repositoryFolder
   }, {}, cxt);
 
-  await exec(['git checkout ' + commitid], {
+  await exec(['git checkout ' + branchid], {
     cwd: repositoryFolder
   }, {}, cxt);
 
   return {folder: repositoryFolder};
 }
 
-export const artifact = async ({
-  artifactid
+export const publish = async ({
+  branchid
 }, {
   folder: repositoryFolder
 }, cxt) => {
@@ -54,19 +53,14 @@ export const artifact = async ({
   await exec(['git add .'], {
     cwd: repositoryFolder
   }, {}, cxt);
-
-  console.log("GENERATE ARTIFACT CHANGES");
-  await exec(['git checkout -b ' + artifactid], {
-    cwd: repositoryFolder
-  }, {}, cxt);
-
+  
   console.log("COMMIT ARTIFACT CHANGES");
-  await exec(['git commit -m "Publish artifact modifications"'], {
+  await exec(['git commit -m "Publish modifications"'], {
     cwd: repositoryFolder
   }, {}, cxt);
 
   console.log("PUSH CHANGES");
-  await exec(['git push --set-upstream origin ' + artifactid], {
+  await exec(['git push --set-upstream origin ' + branchid], {
     cwd: repositoryFolder
   }, {}, cxt);
 
