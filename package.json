@@ -46,9 +46,9 @@
     "analyze": "webpack --config webpack.config.js --env.analyze"
   },
   "dependencies": {
-    "@nebulario/core-logger": "1.1.2-local-ui-graph-prod",
-    "@nebulario/core-node": "1.0.0-master",
-    "@nebulario/core-process": "1.1.41-master"
+    "@nebulario/core-logger": "1.70.0-master",
+    "@nebulario/core-node": "1.70.0-master",
+    "@nebulario/core-process": "1.70.0-master"
   },
   "peerDependencies": {}
 }
