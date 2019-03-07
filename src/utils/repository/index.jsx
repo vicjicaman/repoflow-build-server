@@ -2,17 +2,16 @@ import path from 'path'
 import {exec, retry, wait} from '@nebulario/core-process';
 
 export const init = async ({
-  keyPath,
+  folder: relativeFolder,
   moduleid,
   url,
-  branchid,
-  commitid
+  branchid
 }, {
   type
 }, cxt) => {
 
   const {workspace} = cxt;
-  const folder = path.join(workspace, type, keyPath, moduleid);
+  const folder = path.join(workspace, type, relativeFolder, moduleid);
   const repositoryFolder = path.join(folder, "repository");
 
   try {
@@ -28,9 +27,43 @@ export const init = async ({
     cwd: repositoryFolder
   }, {}, cxt);
 
-  await exec(['git checkout ' + commitid], {
+  await exec(['git checkout ' + branchid], {
     cwd: repositoryFolder
   }, {}, cxt);
 
   return {folder: repositoryFolder};
+}
+
+export const publish = async ({
+  branchid
+}, {
+  folder: repositoryFolder
+}, cxt) => {
+
+  console.log("ADD ARTIFACT CHANGES");
+  const {stdout: status} = await exec(['git status --porcelain'], {
+    cwd: repositoryFolder
+  }, {}, cxt);
+
+  if (status === "") {
+    return false;
+  }
+
+  console.log("ADD ARTIFACT CHANGES");
+  await exec(['git add .'], {
+    cwd: repositoryFolder
+  }, {}, cxt);
+  
+  console.log("COMMIT ARTIFACT CHANGES");
+  await exec(['git commit -m "Publish modifications"'], {
+    cwd: repositoryFolder
+  }, {}, cxt);
+
+  console.log("PUSH CHANGES");
+  await exec(['git push --set-upstream origin ' + branchid], {
+    cwd: repositoryFolder
+  }, {}, cxt);
+
+  return true;
+
 }

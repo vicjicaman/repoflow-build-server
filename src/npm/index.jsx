@@ -33,14 +33,9 @@ export const routes = async (app, cxt) => {
         }
       } catch (e) {}
 
-      if (!ready) {
-        console.log("ALREADY PUBLISHED");
-        return;
-      }
-
       console.log("NPM INSTALL");
-      console.log('yarn install --ignore-scripts --production=false');
-      await exec(['yarn install --ignore-scripts --production=false'], {
+      console.log('yarn install --production=false');
+      await exec(['yarn install --production=false'], {
         cwd: repositoryFolder
       }, {}, cxt);
 
@@ -55,29 +50,32 @@ export const routes = async (app, cxt) => {
       console.log(buildOut.stderr);
       console.log("FINISH BUILD");
 
-      console.log("NPM PUBLISHED");
-      const out = await retry(async i => await exec(['yarn publish --ignore-scripts --new-version=' + version], {
-        cwd: repositoryFolder
-      }, {}, cxt), (re, i, time) => {
+      if (ready) {
+        console.log("NPM PUBLISHED");
+        const out = await retry(async i => await exec(['yarn publish --ignore-scripts --new-version=' + version], {
+          cwd: repositoryFolder
+        }, {}, cxt), (re, i, time) => {
 
-        console.log("NPM FAILED PUBLISH");
-        console.log(re.stdout);
-        console.log(re.stderr);
+          console.log("NPM FAILED PUBLISH.");
+          console.log(re.stdout);
+          console.log(re.stderr);
 
-        if (re.code === 1 && (re.stderr.includes("socket hang up") || re.stderr.includes("EHOSTUNREACH") || re.stderr.includes("ETIMEDOUT"))) {
-          return true;
-        } else {
-          return false;
-        }
+          if (re.code === 1 && (re.stderr.includes("socket hang up") || re.stderr.includes("EHOSTUNREACH") || re.stderr.includes("ETIMEDOUT"))) {
+            return true;
+          } else {
+            return false;
+          }
 
-      }, 5);
+        }, 5);
+      }
 
       console.log("NPM PACKAGE PUBLISHED");
       await wait(2500); // Wait for package propagation
 
-      console.log("START PUBLISH");
-      console.log(out.stdout);
-      console.log(out.stderr);
+      const repository = await Repository.publish(params, {
+        folder: repositoryFolder
+      }, cxt);
+
       console.log("FINISH PUBLISH");
 
       res.json({success: true, message: "NPM package published"});

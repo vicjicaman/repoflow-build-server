@@ -1,3 +1,4 @@
+require('dotenv').config();
 import path from 'path'
 import express from 'express';
 import fs from 'fs';
@@ -16,8 +17,10 @@ const workspace = path.join(process.env.REPOFLOW_WORKSPACE || "/home/victor/node
 console.log("REPOFLOW_WORKSPACE: " + process.env.REPOFLOW_WORKSPACE);
 console.log(workspace);
 
-const name = "build-node";
-const logger = Logger({name});
+const name = "build-server";
+const logPath = path.join(workspace, 'logs');
+console.log(logPath)
+const logger = Logger({path: logPath});
 const cxt = {
   workspace,
   logger
