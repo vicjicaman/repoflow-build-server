@@ -8,6 +8,7 @@ import {Logger} from '@nebulario/core-logger';
 
 import * as HandlerNPM from './npm'
 import * as HandlerContainerNPM from './container'
+import * as HandlerCompose from './compose'
 
 console.log(JSON.stringify(process.env, null, 2));
 
@@ -38,6 +39,7 @@ app.use(function(req, res, next) {
 
 HandlerNPM.routes(app, cxt);
 HandlerContainerNPM.routes(app, cxt);
+HandlerCompose.routes(app, cxt);
 
 app.listen(service_port);
 console.log('Running server at ' + service_port);
