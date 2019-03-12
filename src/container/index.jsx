@@ -3,9 +3,6 @@ import {exec} from '@nebulario/core-process';
 import * as Repository from '../utils/repository'
 
 export const type = "container";
-
-const publish = async (params, cxt) => {}
-
 export const routes = async (app, cxt) => {
   console.log("Register container test routes");
 
@@ -22,12 +19,8 @@ export const routes = async (app, cxt) => {
         type
       }, cxt);
 
-      const modeInstall = mode === "prod"
-        ? "--production=true"
-        : "--production=false";
-
       console.log("INSTALL APP");
-      await exec(['yarn install --ignore-scripts ' + modeInstall], {
+      await exec(['yarn install --ignore-scripts --production=true'], {
         cwd: repositoryFolder
       }, {}, cxt);
 
@@ -41,21 +34,15 @@ export const routes = async (app, cxt) => {
         cwd: repositoryFolder
       }, {}, cxt);
 
-      console.log(awsout);
-
       const loginout = await exec([awsout.stdout], {
         cwd: repositoryFolder
       }, {}, cxt);
-
-      console.log(loginout);
 
       console.log("CHECK REPOSITORY IMAGE");
       try {
         const checkout = await exec(['aws ecr list-images --repository-name ' + moduleid], {
           cwd: repositoryFolder
         }, {}, cxt);
-
-        console.log(checkout);
 
       } catch (e) {
 
@@ -81,6 +68,12 @@ export const routes = async (app, cxt) => {
       console.log(cmdout.stdout);
       console.log(cmdout.stderr);
       console.log("FINISH PUBLISH");
+
+      await wait(2500); // Wait for package propagation
+
+      const repository = await Repository.publish(params, {
+        folder: repositoryFolder
+      }, cxt);
 
       res.json({success: true, message: "Container published"});
     } catch (e) {
