@@ -10,17 +10,17 @@ import * as HandlerNPM from './npm'
 import * as HandlerContainerNPM from './container'
 import * as HandlerCompose from './compose'
 
-console.log(JSON.stringify(process.env, null, 2));
+//console.log(JSON.stringify(process.env, null, 2));
 
 const service_port = process.env.SERVICE_PORT || 8000;
 const workspace = path.join(process.env.REPOFLOW_WORKSPACE || "/home/victor/nodeflow/workspace", "build");
 
-console.log("REPOFLOW_WORKSPACE: " + process.env.REPOFLOW_WORKSPACE);
-console.log(workspace);
+//console.log("REPOFLOW_WORKSPACE: " + process.env.REPOFLOW_WORKSPACE);
+//console.log(workspace);
 
 const name = "build-server";
 const logPath = path.join(workspace, 'logs');
-console.log(logPath)
+//console.log(logPath)
 const logger = Logger({path: logPath});
 const cxt = {
   workspace,

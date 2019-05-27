@@ -70,7 +70,7 @@ export const routes = async (app, cxt) => {
       }
 
       console.log("NPM PACKAGE PUBLISHED");
-      await wait(2500); // Wait for package propagation
+      await wait(1000); // Wait for package propagation
 
       const repository = await Repository.publish(params, {
         folder: repositoryFolder
