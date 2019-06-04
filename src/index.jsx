@@ -41,5 +41,6 @@ HandlerNPM.routes(app, cxt);
 HandlerContainerNPM.routes(app, cxt);
 HandlerCompose.routes(app, cxt);
 
-app.listen(service_port);
+const server = app.listen(service_port);
+server.setTimeout(60 * 5 * 1000); // 5min
 console.log('Running server at ' + service_port);
