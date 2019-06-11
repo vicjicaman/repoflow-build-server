@@ -9,6 +9,7 @@ import {Logger} from '@nebulario/core-logger';
 import * as HandlerNPM from './npm'
 import * as HandlerContainerNPM from './container'
 import * as HandlerCompose from './compose'
+import * as HandlerBundle from './bundle'
 
 //console.log(JSON.stringify(process.env, null, 2));
 
@@ -40,6 +41,7 @@ app.use(function(req, res, next) {
 HandlerNPM.routes(app, cxt);
 HandlerContainerNPM.routes(app, cxt);
 HandlerCompose.routes(app, cxt);
+HandlerBundle.routes(app, cxt);
 
 const server = app.listen(service_port);
 server.setTimeout(60 * 5 * 1000); // 5min

@@ -1,5 +1,9 @@
 import path from 'path'
-import {exec, retry, wait} from '@nebulario/core-process';
+import {
+  exec,
+  retry,
+  wait
+} from '@nebulario/core-process';
 
 export const init = async ({
   folder: relativeFolder,
@@ -10,7 +14,9 @@ export const init = async ({
   type
 }, cxt) => {
 
-  const {workspace} = cxt;
+  const {
+    workspace
+  } = cxt;
   const folder = path.join(workspace, type, relativeFolder, moduleid);
   const repositoryFolder = path.join(folder, "repository");
 
@@ -31,38 +37,66 @@ export const init = async ({
     cwd: repositoryFolder
   }, {}, cxt);
 
-  return {folder: repositoryFolder};
+  return {
+    folder: repositoryFolder
+  };
 }
 
 export const publish = async ({
-  branchid
+  branchid,
+  version
 }, {
   folder: repositoryFolder
 }, cxt) => {
 
+
   console.log("ADD ARTIFACT CHANGES");
-  const {stdout: status} = await exec(['git status --porcelain'], {
+  const {
+    stdout: status
+  } = await exec(['git status --porcelain'], {
     cwd: repositoryFolder
   }, {}, cxt);
 
-  if (status === "") {
-    return false;
+  if (status !== "") {
+
+    console.log("ADD ARTIFACT CHANGES");
+    await exec(['git add .'], {
+      cwd: repositoryFolder
+    }, {}, cxt);
+
+    console.log("COMMIT ARTIFACT CHANGES");
+    await exec(['git commit -m "Publish modifications"'], {
+      cwd: repositoryFolder
+    }, {}, cxt);
+
+    console.log("PUSH CHANGES");
+    await exec(['git push --set-upstream origin ' + branchid], {
+      cwd: repositoryFolder
+    }, {}, cxt);
+
   }
 
-  console.log("ADD ARTIFACT CHANGES");
-  await exec(['git add .'], {
-    cwd: repositoryFolder
-  }, {}, cxt);
-  
-  console.log("COMMIT ARTIFACT CHANGES");
-  await exec(['git commit -m "Publish modifications"'], {
+  console.log("TAG WITH VERSION");
+  const {
+    stdout: tagout
+  } = await exec(['git tag v' + version], {
     cwd: repositoryFolder
   }, {}, cxt);
 
-  console.log("PUSH CHANGES");
-  await exec(['git push --set-upstream origin ' + branchid], {
+  console.log(tagout);
+
+  const {
+    stdout: pushout
+  } = await exec(['git push origin v' + version], {
     cwd: repositoryFolder
   }, {}, cxt);
+
+  console.log(pushout);
+  console.log("FINISH PUBLISH TAG TO REPOSITORY");
+  //await wait(2500); // Wait for package propagation
+
+
+
 
   return true;
 
