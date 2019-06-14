@@ -2,23 +2,23 @@
 # yarn lockfile v1
 
 
-"@nebulario/core-config@1.70.1-config-handler-prod":
-  version "1.70.1-config-handler-prod"
-  resolved "https://registry.yarnpkg.com/@nebulario/core-config/-/core-config-1.70.1-config-handler-prod.tgz#b389dba26638c6d586fa0a21f674fd685bb1bcf3"
-  integrity sha512-ZTEEyVGDVcT6Y6XUAKlhpqvps95larW/TnwfpIuGbTCnHv8E/XVYKMTJCtitjNwycqsO18P8ULjkl4FYI7IlUQ==
+"@nebulario/core-config@1.70.0-master":
+  version "1.70.0-master"
+  resolved "https://registry.yarnpkg.com/@nebulario/core-config/-/core-config-1.70.0-master.tgz#5f06d7b468799b0d709da51a8212b6230e17fd52"
+  integrity sha512-KbrFfWko5HvH36BCOHwcX3g3M1tUZgiZs3+kZIKXeJ6n3dZWQjMx+kMTu1Wpiw6uV6wU4CCi0F/I9GZwAE++qw==
   dependencies:
-    "@nebulario/core-json" "1.70.1-config-handler-prod"
-    "@nebulario/core-repository" "1.70.1-config-handler-prod"
+    "@nebulario/core-json" "1.70.0-master"
+    "@nebulario/core-repository" "1.70.0-master"
     babel-runtime "^6.26.0"
     bluebird "^3.5.1"
     child-process-promise "^2.2.1"
     lodash "^4.17.4"
     uuid "^3.3.2"
 
-"@nebulario/core-json@1.70.1-config-handler-prod":
-  version "1.70.1-config-handler-prod"
-  resolved "https://registry.yarnpkg.com/@nebulario/core-json/-/core-json-1.70.1-config-handler-prod.tgz#83e83c276e391c7676549cd057f2bf0b86ae899d"
-  integrity sha512-KWRohfO831epJxRWcXW83eedsaPXvJ7KbvKxtX5OwBDbwIvPkA6V4ZRMh02rH/2i5uFwawTdQWw9F1ilo/XkVg==
+"@nebulario/core-json@1.70.0-master":
+  version "1.70.0-master"
+  resolved "https://registry.yarnpkg.com/@nebulario/core-json/-/core-json-1.70.0-master.tgz#854c806d800ade7e0e3d94df4bda75244d1bd251"
+  integrity sha512-lLk4W9Y1R63lZ/MCDM4gWWqaTLUpmlI7dY0i/RnEGJe6u9Q1H5R0cKNOhfIJVjJWndcjzqe06N0Q9Wu7fYgEXA==
   dependencies:
     yamljs "^0.3.0"
 
@@ -51,10 +51,10 @@
     lodash "^4.17.4"
     uuid "^3.3.2"
 
-"@nebulario/core-repository@1.70.1-config-handler-prod":
-  version "1.70.1-config-handler-prod"
-  resolved "https://registry.yarnpkg.com/@nebulario/core-repository/-/core-repository-1.70.1-config-handler-prod.tgz#555bb1e9c6cca0d8cdbeab3182ed8efd5e0fe0b6"
-  integrity sha512-MXPV1uz/Nkp4PKkESBMmVPMLJO6ghPh6cKQJIEokgK3ZGrgJxekjbLmuIG0uSPsZBOM6RKbKjqaRVL0BPl/htA==
+"@nebulario/core-repository@1.70.0-master":
+  version "1.70.0-master"
+  resolved "https://registry.yarnpkg.com/@nebulario/core-repository/-/core-repository-1.70.0-master.tgz#d2b60d7dca10a161a6869e6e32d5cd6a75a15cfe"
+  integrity sha512-I5bxZ7sjiLwR3rdNcYf8BDiB0zOzrYe3PkJcyoOX11knihFiK86HL8zDewiSFqz22tObcCA2up1CAkcmzr9N1Q==
   dependencies:
     "@nebulario/core-process" "1.70.0-master"
 
