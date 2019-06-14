@@ -49,6 +49,7 @@
     "@nebulario/core-logger": "1.70.0-master",
     "@nebulario/core-node": "1.70.0-master",
     "@nebulario/core-process": "1.70.0-master",
+    "@nebulario/core-config": "link:./../core-config",
     "dotenv": "^6.2.0"
   },
   "peerDependencies": {}

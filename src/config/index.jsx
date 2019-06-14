@@ -5,6 +5,7 @@ import {
   retry,
   wait
 } from '@nebulario/core-process';
+import * as Config from '@nebulario/core-config';
 
 export const type = "config";
 export const routes = async (app, cxt) => {
@@ -15,7 +16,6 @@ export const routes = async (app, cxt) => {
     console.log(JSON.stringify(req.body, null, 2));
 
     try {
-      //res.writeHead(200, {'Content-Type': 'text/plain'});
       const params = req.body;
 
       const {
@@ -32,22 +32,20 @@ export const routes = async (app, cxt) => {
       }, cxt);
 
 
-      console.log("NPM INSTALL");
-      console.log('yarn install --production=false');
-      await exec(['yarn install --production=false'], {
-        cwd: repositoryFolder
-      }, {}, cxt);
+      console.log("INIT CONFIG");
+      await Config.init(repositoryFolder);
 
+      console.log("BUILD CONFIG");
+      Config.build(repositoryFolder);
 
       const repository = await Repository.publish(params, {
         folder: repositoryFolder
       }, cxt);
 
-      console.log("FINISH PUBLISH");
 
       res.json({
         success: true,
-        message: "NPM package published"
+        message: "Config repository published."
       });
     } catch (e) {
       console.log("ERROR:" + e.toString());
