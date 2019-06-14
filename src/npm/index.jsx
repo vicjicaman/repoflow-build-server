@@ -1,6 +1,10 @@
 import path from 'path'
 import * as Repository from '../utils/repository'
-import {exec, retry, wait} from '@nebulario/core-process';
+import {
+  exec,
+  retry,
+  wait
+} from '@nebulario/core-process';
 
 export const type = "npm";
 export const routes = async (app, cxt) => {
@@ -14,16 +18,25 @@ export const routes = async (app, cxt) => {
       //res.writeHead(200, {'Content-Type': 'text/plain'});
       const params = req.body;
 
-      const {moduleid, mode, version, fullname} = params;
+      const {
+        moduleid,
+        mode,
+        version,
+        fullname
+      } = params;
 
-      const {folder: repositoryFolder} = await Repository.init(params, {
+      const {
+        folder: repositoryFolder
+      } = await Repository.init(params, {
         type
       }, cxt);
 
       let ready = true;
       try {
 
-        const {stdout: versionsInfoString} = await exec(['yarn info ' + fullname + ' versions --json'], {
+        const {
+          stdout: versionsInfoString
+        } = await exec(['yarn info ' + fullname + ' versions --json'], {
           cwd: repositoryFolder
         }, {}, cxt);
         const info = JSON.parse(versionsInfoString);
@@ -33,24 +46,26 @@ export const routes = async (app, cxt) => {
         }
       } catch (e) {}
 
-      console.log("NPM INSTALL");
-      console.log('yarn install --production=false');
-      await exec(['yarn install --production=false'], {
-        cwd: repositoryFolder
-      }, {}, cxt);
-
-      console.log("NPM BUILD");
-      console.log('yarn build:' + mode);
-      const buildOut = await exec(['yarn build:' + mode], {
-        cwd: repositoryFolder
-      }, {}, cxt);
-
-      console.log("START BUILD");
-      console.log(buildOut.stdout);
-      console.log(buildOut.stderr);
-      console.log("FINISH BUILD");
-
       if (ready) {
+
+        console.log("NPM INSTALL");
+        console.log('yarn install --production=false');
+        await exec(['yarn install --production=false'], {
+          cwd: repositoryFolder
+        }, {}, cxt);
+
+        console.log("NPM BUILD");
+        console.log('yarn build:' + mode);
+        const buildOut = await exec(['yarn build:' + mode], {
+          cwd: repositoryFolder
+        }, {}, cxt);
+
+        console.log("START BUILD");
+        console.log(buildOut.stdout);
+        console.log(buildOut.stderr);
+        console.log("FINISH BUILD");
+
+
         console.log("NPM PUBLISHED");
         const out = await retry(async i => await exec(['yarn publish --ignore-scripts --new-version=' + version], {
           cwd: repositoryFolder
@@ -78,9 +93,14 @@ export const routes = async (app, cxt) => {
 
       console.log("FINISH PUBLISH");
 
-      res.json({success: true, message: "NPM package published"});
+      res.json({
+        success: true,
+        message: "NPM package published"
+      });
     } catch (e) {
-      res.json({error: e.toString()});
+      res.json({
+        error: e.toString()
+      });
     } finally {
       res.end();
     }

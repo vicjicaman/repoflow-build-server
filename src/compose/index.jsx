@@ -19,21 +19,6 @@ export const routes = async (app, cxt) => {
         type
       }, cxt);
 
-      console.log("TAG WITH VERSION");
-      const {stdout: tagout} = await exec(['git tag v' + version], {
-        cwd: repositoryFolder
-      }, {}, cxt);
-
-      console.log(tagout);
-
-      const {stdout: pushout} = await exec(['git push origin v' + version], {
-        cwd: repositoryFolder
-      }, {}, cxt);
-
-      console.log(pushout);
-      console.log("FINISH PUBLISH");
-      await wait(2500); // Wait for package propagation
-
       const repository = await Repository.publish(params, {
         folder: repositoryFolder
       }, cxt);
