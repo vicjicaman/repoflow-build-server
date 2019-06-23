@@ -69,8 +69,6 @@ export const routes = async (app, cxt) => {
       console.log(cmdout.stderr);
       console.log("FINISH PUBLISH");
 
-      await wait(2500); // Wait for package propagation
-
       const repository = await Repository.publish(params, {
         folder: repositoryFolder
       }, cxt);
