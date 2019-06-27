@@ -25,7 +25,7 @@ export const routes = async (app, cxt) => {
       }, {}, cxt);
 
       console.log("BUILD IMAGE");
-      await exec(['docker build . -t ' + fullname + ':' + version], {
+      await exec(['docker build -t ' + fullname + ':' + version + '  --build-arg CACHEBUST=$(date +%s) . '], {
         cwd: repositoryFolder
       }, {}, cxt);
 
@@ -68,8 +68,6 @@ export const routes = async (app, cxt) => {
       console.log(cmdout.stdout);
       console.log(cmdout.stderr);
       console.log("FINISH PUBLISH");
-
-      await wait(2500); // Wait for package propagation
 
       const repository = await Repository.publish(params, {
         folder: repositoryFolder

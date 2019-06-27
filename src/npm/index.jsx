@@ -1,4 +1,5 @@
 import path from 'path'
+import _ from 'lodash'
 import * as Repository from '../utils/repository'
 import {
   exec,
@@ -22,8 +23,18 @@ export const routes = async (app, cxt) => {
         moduleid,
         mode,
         version,
-        fullname
+        fullname,
+        labels
       } = params;
+
+
+      //throw new Error("prevent publish: " + JSON.stringify(labels))
+
+      console.log(labels);
+      const isPublic = !!_.find(labels, {
+        labelid: "public"
+      });
+
 
       const {
         folder: repositoryFolder
@@ -66,8 +77,8 @@ export const routes = async (app, cxt) => {
         console.log("FINISH BUILD");
 
 
-        console.log("NPM PUBLISHED");
-        const out = await retry(async i => await exec(['yarn publish --ignore-scripts --new-version=' + version], {
+        console.log("NPM PUBLISHED: " + isPublic);
+        const out = await retry(async i => await exec(['yarn publish --ignore-scripts --network-timeout 600000 --new-version=' + version + (isPublic ? " --access public " : "")], {
           cwd: repositoryFolder
         }, {}, cxt), (re, i, time) => {
 
