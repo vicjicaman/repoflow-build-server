@@ -1,4 +1,5 @@
 import path from 'path'
+import _ from 'lodash'
 import {
   exec,
   retry,
@@ -76,22 +77,35 @@ export const publish = async ({
 
   }
 
-  console.log("TAG WITH VERSION");
+
   const {
-    stdout: tagout
-  } = await exec(['git tag v' + version], {
+    stdout: tagList
+  } = await exec(['git tag --list'], {
     cwd: repositoryFolder
   }, {}, cxt);
 
-  console.log(tagout);
+  const tags = _.map(tagList.split("\n"), tag => tag.trim());
 
-  const {
-    stdout: pushout
-  } = await exec(['git push origin v' + version], {
-    cwd: repositoryFolder
-  }, {}, cxt);
+  if (!tags.includes("v"+version)) {
+    console.log("TAG WITH VERSION");
+    const {
+      stdout: tagout
+    } = await exec(['git tag v' + version], {
+      cwd: repositoryFolder
+    }, {}, cxt);
 
-  console.log(pushout);
+    console.log(tagout);
+
+    const {
+      stdout: pushout
+    } = await exec(['git push origin v' + version], {
+      cwd: repositoryFolder
+    }, {}, cxt);
+    console.log(pushout);
+  }
+
+
+
   console.log("FINISH PUBLISH TAG TO REPOSITORY");
   //await wait(2500); // Wait for package propagation
 

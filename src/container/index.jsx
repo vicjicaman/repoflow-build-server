@@ -25,7 +25,7 @@ export const routes = async (app, cxt) => {
       }, {}, cxt);
 
       console.log("BUILD IMAGE");
-      await exec(['docker build . -t ' + fullname + ':' + version], {
+      await exec(['docker build -t ' + fullname + ':' + version + '  --build-arg CACHEBUST=$(date +%s) . '], {
         cwd: repositoryFolder
       }, {}, cxt);
 
