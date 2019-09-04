@@ -65,16 +65,24 @@ export const routes = async (app, cxt) => {
           cwd: repositoryFolder
         }, {}, cxt);
 
-        console.log("NPM BUILD");
-        console.log('yarn build:' + mode);
-        const buildOut = await exec(['yarn build:' + mode], {
-          cwd: repositoryFolder
-        }, {}, cxt);
+        try{
 
-        console.log("START BUILD");
-        console.log(buildOut.stdout);
-        console.log(buildOut.stderr);
-        console.log("FINISH BUILD");
+          console.log("NPM BUILD");
+          console.log('yarn build:' + mode);
+          const buildOut = await exec(['yarn build:' + mode], {
+            cwd: repositoryFolder
+          }, {}, cxt);
+
+          console.log("START BUILD");
+          console.log(buildOut.stdout);
+          console.log(buildOut.stderr);
+          console.log("FINISH BUILD");
+
+        }catch(e){
+          console.log(e.toString());
+          console.log("ERROR BUILD");
+        }
+
 
 
         console.log("NPM PUBLISHED: " + isPublic);
