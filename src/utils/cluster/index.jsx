@@ -1,3 +1,4 @@
+import fs from 'fs';
 import path from 'path'
 import * as Config from '@nebulario/core-config';
 import * as JsonUtils from '@nebulario/core-json'

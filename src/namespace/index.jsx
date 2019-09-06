@@ -34,11 +34,11 @@ export const routes = async (app, cxt) => {
       }, cxt);
 
 
-      await Config.init(folder);
-      Config.build(folder);
+      await Config.init(repositoryFolder);
+      Config.build(repositoryFolder);
 
-      Cluster.config(folder, "service.yaml");
-      Cluster.config(folder, "stateful.yaml");
+      Cluster.config(repositoryFolder, "namespace.yaml");
+      Cluster.config(repositoryFolder, "ingress.yaml");
 
 
       const repository = await Repository.publish(params, {

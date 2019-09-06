@@ -38,8 +38,6 @@ export const init = async ({
     cwd: repositoryFolder
   }, {}, cxt);
 
-  await wait(2500); // Wait for checkout
-
   return {
     folder: repositoryFolder
   };
