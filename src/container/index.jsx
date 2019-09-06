@@ -1,5 +1,8 @@
 import path from 'path'
-import {exec} from '@nebulario/core-process';
+import _ from 'lodash'
+import {
+  exec
+} from '@nebulario/core-process';
 import * as Repository from '../utils/repository'
 
 export const type = "container";
@@ -13,9 +16,17 @@ export const routes = async (app, cxt) => {
     try {
 
       const params = req.body;
-      const {moduleid, mode, version, fullname} = params;
+      const {
+        moduleid,
+        mode,
+        version,
+        fullname,
+        labels
+      } = params;
 
-      const {folder: repositoryFolder} = await Repository.init(params, {
+      const {
+        folder: repositoryFolder
+      } = await Repository.init(params, {
         type
       }, cxt);
 
@@ -29,33 +40,42 @@ export const routes = async (app, cxt) => {
         cwd: repositoryFolder
       }, {}, cxt);
 
-      console.log("LOGIN IN AWS");
-      const awsout = await exec(['aws ecr get-login --no-include-email --region us-east-1'], {
-        cwd: repositoryFolder
-      }, {}, cxt);
 
-      const loginout = await exec([awsout.stdout], {
-        cwd: repositoryFolder
-      }, {}, cxt);
+      console.log(labels);
+      const isAWS = !!_.find(labels, {
+        labelid: "aws"
+      });
 
-      console.log("CHECK REPOSITORY IMAGE");
-      try {
-        const checkout = await exec(['aws ecr list-images --repository-name ' + moduleid], {
+      if (isAWS) {
+
+        console.log("LOGIN IN AWS");
+        const awsout = await exec(['aws ecr get-login --no-include-email --region us-east-1'], {
           cwd: repositoryFolder
         }, {}, cxt);
 
-      } catch (e) {
+        const loginout = await exec([awsout.stdout], {
+          cwd: repositoryFolder
+        }, {}, cxt);
 
-        if (e.message.includes("does not exist in the registry with id")) {
-
-          await exec(['aws ecr create-repository --repository-name ' + moduleid], {
+        console.log("CHECK REPOSITORY IMAGE");
+        try {
+          const checkout = await exec(['aws ecr list-images --repository-name ' + moduleid], {
             cwd: repositoryFolder
           }, {}, cxt);
 
-        } else {
-          throw e;
-        }
+        } catch (e) {
 
+          if (e.message.includes("does not exist in the registry with id")) {
+
+            await exec(['aws ecr create-repository --repository-name ' + moduleid], {
+              cwd: repositoryFolder
+            }, {}, cxt);
+
+          } else {
+            throw e;
+          }
+
+        }
       }
 
       console.log("PUSH IMAGE IN REPO");
@@ -73,9 +93,14 @@ export const routes = async (app, cxt) => {
         folder: repositoryFolder
       }, cxt);
 
-      res.json({success: true, message: "Container published"});
+      res.json({
+        success: true,
+        message: "Container published"
+      });
     } catch (e) {
-      res.json({error: e.toString()});
+      res.json({
+        error: e.toString()
+      });
     } finally {
       res.end();
     }
