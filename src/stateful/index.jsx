@@ -5,7 +5,7 @@ import {
   retry,
   wait
 } from '@nebulario/core-process';
-import * as Cluster from '../utils/cluster'
+import * as Cluster from "@nebulario/core-cluster";
 import * as Config from '@nebulario/core-config';
 import * as JsonUtils from '@nebulario/core-json'
 
@@ -36,9 +36,13 @@ export const routes = async (app, cxt) => {
 
       await Config.init(repositoryFolder);
       Config.build(repositoryFolder);
+      const values = Config.load(repositoryFolder);
 
-      Cluster.config(repositoryFolder, "service.yaml");
-      Cluster.config(repositoryFolder, "stateful.yaml");
+      const src = repositoryFolder;
+      const dest = path.join(repositoryFolder, "dist");
+
+      Cluster.Config.configure("service.yaml", src, dest, values);
+      Cluster.Config.configure("stateful.yaml", src, dest, values);
 
       const repository = await Repository.publish(params, {
         folder: repositoryFolder

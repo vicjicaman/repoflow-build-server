@@ -107,7 +107,7 @@ export const publish = async ({
 
 
   console.log("FINISH PUBLISH TAG TO REPOSITORY");
-  //await wait(2500); // Wait for package propagation
+  //await wait(100); //wait(2500); // Wait for package propagation
 
 
 

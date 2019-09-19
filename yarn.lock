@@ -2,6 +2,10 @@
 # yarn lockfile v1
 
 
+"@nebulario/core-cluster@link:../core-cluster":
+  version "0.0.0"
+  uid ""
+
 "@nebulario/core-config@link:../core-config":
   version "0.0.0"
   uid ""
