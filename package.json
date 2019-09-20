@@ -1,6 +1,6 @@
 {
   "name": "@nebulario/repoflow-build-server",
-  "version": "1.70.5-master",
+  "version": "1.70.0-runtime-reference-prod",
   "description": "Base for modules in node",
   "main": "./dist/index.js",
   "repository": "github.com:vicjicaman/repoflow-build-server.git",
@@ -49,8 +49,8 @@
     "@nebulario/core-logger": "1.70.1-master",
     "@nebulario/core-node": "1.70.1-master",
     "@nebulario/core-process": "1.70.1-master",
-    "@nebulario/core-config": "link:./../core-config",
-    "@nebulario/core-cluster": "link:./../core-cluster",
+    "@nebulario/core-config": "1.70.0-runtime-reference-prod",
+    "@nebulario/core-cluster": "1.70.0-runtime-reference-prod",
     "dotenv": "^6.2.0"
   },
   "peerDependencies": {}
