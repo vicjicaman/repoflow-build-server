@@ -12,9 +12,7 @@ import * as HandlerCompose from './compose'
 import * as HandlerBundle from './bundle'
 import * as HandlerConfig from './config'
 import * as HandlerSite from './site'
-import * as HandlerNamespace from './namespace'
-import * as HandlerService from './service'
-import * as HandlerStateful from './stateful'
+import * as HandlerRealm from './realm'
 
 //console.log(JSON.stringify(process.env, null, 2));
 
@@ -49,10 +47,8 @@ HandlerCompose.routes(app, cxt);
 HandlerBundle.routes(app, cxt);
 HandlerConfig.routes(app, cxt);
 HandlerSite.routes(app, cxt);
-HandlerNamespace.routes(app, cxt);
-HandlerService.routes(app, cxt);
-HandlerStateful.routes(app, cxt);
+HandlerRealm.routes(app, cxt);
 
 const server = app.listen(service_port);
-server.setTimeout(60 * 5 * 1000); // 5min
+server.setTimeout(60 * 10 * 1000); // 10min
 console.log('Running server at ' + service_port);

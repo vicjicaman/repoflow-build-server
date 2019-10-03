@@ -1,16 +1,16 @@
 import path from "path";
 import * as Repository from "../utils/repository";
 import { exec, retry, wait } from "@nebulario/core-process";
-import * as Config from "@nebulario/core-config";
 import * as Cluster from "@nebulario/core-cluster";
+import * as Config from "@nebulario/core-config";
 import * as JsonUtils from "@nebulario/core-json";
 
-export const type = "service";
+export const type = "realm";
 export const routes = async (app, cxt) => {
-  console.log("Register service routes");
+  console.log("Register realm routes");
 
-  app.post("/build/service", async (req, res) => {
-    console.log("Build request service!");
+  app.post("/build/realm", async (req, res) => {
+    console.log("Build request realm!");
     console.log(JSON.stringify(req.body, null, 2));
 
     try {
@@ -30,11 +30,24 @@ export const routes = async (app, cxt) => {
       Config.build(repositoryFolder);
       const values = Config.load(repositoryFolder);
 
-      const src = repositoryFolder;
-      const dest = path.join(repositoryFolder, "dist");
-
-      Cluster.Config.configure("service.yaml", src, dest, values);
-      Cluster.Config.configure("deployment.yaml", src, dest, values);
+      cxt.params = {};
+      await Cluster.Tasks.Build.exec(
+        repositoryFolder,
+        {
+          general: {
+            hooks: {
+              error: ({ type, file }, { error }) =>
+                console.log(type + " " + file + "  " + error.toString()),
+              pre: e => e,
+              post: ({ type, file }) =>
+                console.log(type + " " + file + " configured ")
+            },
+            params: { values }
+          }
+        },
+        {},
+        cxt
+      );
 
       const repository = await Repository.publish(
         params,
@@ -46,7 +59,7 @@ export const routes = async (app, cxt) => {
 
       res.json({
         success: true,
-        message: "Service repository published."
+        message: "Realm repository published."
       });
     } catch (e) {
       console.log("ERROR:" + e.toString());
