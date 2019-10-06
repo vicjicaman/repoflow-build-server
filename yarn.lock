@@ -2,13 +2,21 @@
 # yarn lockfile v1
 
 
-"@nebulario/core-cluster@link:../core-cluster":
-  version "0.0.0"
-  uid ""
-
-"@nebulario/core-config@1.70.0-container-runtime-prod":
-  version "0.0.0"
-  uid ""
+"@nebulario/core-cluster@1.70.1-container-runtime-prod":
+  version "1.70.1-container-runtime-prod"
+  resolved "https://registry.yarnpkg.com/@nebulario/core-cluster/-/core-cluster-1.70.1-container-runtime-prod.tgz#fbbf3425011c8c6d9bc577aac96ad2b50e435762"
+  integrity sha512-9T4YRzvX9V+rsKkU85vWY/siKFNlGWHN9QLJsjuKE/wctcC7hGSepka7qAQ759PUeeKzJp7x0ALWfd5OEDNkeg==
+  dependencies:
+    "@nebulario/core-config" "link:../../../../../../../../../../../../.cache/yarn/v4/npm-@nebulario-core-cluster-1.70.1-container-runtime-prod-fbbf3425011c8c6d9bc577aac96ad2b50e435762/node_modules/@nebulario/core-config"
+    "@nebulario/core-json" "1.70.1-master"
+    "@nebulario/core-process" "1.70.1-master"
+    "@nebulario/core-repository" "1.70.1-master"
+    babel-runtime "^6.26.0"
+    bluebird "^3.5.1"
+    child-process-promise "^2.2.1"
+    fs-extra "^8.1.0"
+    lodash "^4.17.4"
+    uuid "^3.3.3"
 
 "@nebulario/core-config@link:../core-config":
   version "0.0.0"
