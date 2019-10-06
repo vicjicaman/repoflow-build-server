@@ -2,12 +2,12 @@
 # yarn lockfile v1
 
 
-"@nebulario/core-cluster@1.70.1-container-runtime-prod":
-  version "1.70.1-container-runtime-prod"
-  resolved "https://registry.yarnpkg.com/@nebulario/core-cluster/-/core-cluster-1.70.1-container-runtime-prod.tgz#fbbf3425011c8c6d9bc577aac96ad2b50e435762"
-  integrity sha512-9T4YRzvX9V+rsKkU85vWY/siKFNlGWHN9QLJsjuKE/wctcC7hGSepka7qAQ759PUeeKzJp7x0ALWfd5OEDNkeg==
+"@nebulario/core-cluster@1.70.1-master":
+  version "1.70.1-master"
+  resolved "https://registry.yarnpkg.com/@nebulario/core-cluster/-/core-cluster-1.70.1-master.tgz#45832a12bc8bbe09818db99e7c46f0b67f4ab1ac"
+  integrity sha512-CRUQhKrjrATOEnebCdLwuyp5YPFfIzeHvyY5AdLBlLYVTEUY/33VokhYoAWIpgBnvF+UtZHhvmMqm3F+H6WNyA==
   dependencies:
-    "@nebulario/core-config" "link:../../../../../../../../../../../../.cache/yarn/v4/npm-@nebulario-core-cluster-1.70.1-container-runtime-prod-fbbf3425011c8c6d9bc577aac96ad2b50e435762/node_modules/@nebulario/core-config"
+    "@nebulario/core-config" "1.70.4-master"
     "@nebulario/core-json" "1.70.1-master"
     "@nebulario/core-process" "1.70.1-master"
     "@nebulario/core-repository" "1.70.1-master"
@@ -18,9 +18,18 @@
     lodash "^4.17.4"
     uuid "^3.3.3"
 
-"@nebulario/core-config@link:../core-config":
-  version "0.0.0"
-  uid ""
+"@nebulario/core-config@1.70.4-master":
+  version "1.70.4-master"
+  resolved "https://registry.yarnpkg.com/@nebulario/core-config/-/core-config-1.70.4-master.tgz#16aa08f683cb1171846df89385a922f18c5988aa"
+  integrity sha512-107asi0GVLEG+m64h6zuZS0F7D5tbTOLwCm3/OT5VgpcaRJVgYTwE7gKIw6qTwQPgQhyW7b7SfNrSLDdTJMokA==
+  dependencies:
+    "@nebulario/core-json" "1.70.1-master"
+    "@nebulario/core-repository" "1.70.1-master"
+    babel-runtime "^6.26.0"
+    bluebird "^3.5.1"
+    child-process-promise "^2.2.1"
+    lodash "^4.17.4"
+    uuid "^3.3.2"
 
 "@nebulario/core-json@1.70.1-master":
   version "1.70.1-master"
