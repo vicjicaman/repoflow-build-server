@@ -18,19 +18,6 @@
     lodash "^4.17.4"
     uuid "^3.3.3"
 
-"@nebulario/core-config@1.70.4-master":
-  version "1.70.4-master"
-  resolved "https://registry.yarnpkg.com/@nebulario/core-config/-/core-config-1.70.4-master.tgz#16aa08f683cb1171846df89385a922f18c5988aa"
-  integrity sha512-107asi0GVLEG+m64h6zuZS0F7D5tbTOLwCm3/OT5VgpcaRJVgYTwE7gKIw6qTwQPgQhyW7b7SfNrSLDdTJMokA==
-  dependencies:
-    "@nebulario/core-json" "1.70.1-master"
-    "@nebulario/core-repository" "1.70.1-master"
-    babel-runtime "^6.26.0"
-    bluebird "^3.5.1"
-    child-process-promise "^2.2.1"
-    lodash "^4.17.4"
-    uuid "^3.3.2"
-
 "@nebulario/core-config@1.70.5-master":
   version "1.70.5-master"
   resolved "https://registry.yarnpkg.com/@nebulario/core-config/-/core-config-1.70.5-master.tgz#e14276c6e254aa3e1fb4543f26adf3b75746327a"
@@ -51,13 +38,13 @@
   dependencies:
     yamljs "^0.3.0"
 
-"@nebulario/core-logger@1.70.1-master":
-  version "1.70.1-master"
-  resolved "https://registry.yarnpkg.com/@nebulario/core-logger/-/core-logger-1.70.1-master.tgz#86c2e7610c186dced7b88f7bca989a374bc618f4"
-  integrity sha512-QMPZaW3Hh15oeFi0OEk7sJ+jx9SXuugyvlqDC7mY/WpL/9r4EF1HaT2gWnU9y7RljsenWepIMHguqjr1TQcFhw==
+"@nebulario/core-logger@1.70.2-master":
+  version "1.70.2-master"
+  resolved "https://registry.yarnpkg.com/@nebulario/core-logger/-/core-logger-1.70.2-master.tgz#d6775af417f5d16d0ab51ad44c8d7a305257adc7"
+  integrity sha512-giQY2YmBCprPVA+onHE7bf6PIt5Ol2jWiCrL44+Ft0N8CgNYPsPL/ISeuVR5x5B1JgiwmL0rPQqafwLI1+2Eaw==
   dependencies:
     babel-runtime "^6.26.0"
-    winston "^3.1.0"
+    winston "^3.2.0"
 
 "@nebulario/core-node@1.70.1-master":
   version "1.70.1-master"
@@ -5506,7 +5493,7 @@ winston-transport@^4.3.0:
     readable-stream "^2.3.6"
     triple-beam "^1.2.0"
 
-winston@^3.1.0:
+winston@^3.2.0:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/winston/-/winston-3.2.1.tgz#63061377976c73584028be2490a1846055f77f07"
   integrity sha512-zU6vgnS9dAWCEKg/QYigd6cgMVVNwyTzKs81XZtTFuRwJOcDdBg7AU0mXVyNbs7O5RH2zdv+BdNZUlx7mXPuOw==
