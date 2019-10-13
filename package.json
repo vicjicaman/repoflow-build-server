@@ -46,10 +46,10 @@
     "analyze": "webpack --config webpack.config.js --env.analyze"
   },
   "dependencies": {
-    "@nebulario/core-logger": "1.70.1-master",
+    "@nebulario/core-logger": "1.70.2-master",
     "@nebulario/core-node": "1.70.1-master",
     "@nebulario/core-process": "1.70.1-master",
-    "@nebulario/core-config": "1.70.4-master",
+    "@nebulario/core-config": "1.70.5-master",
     "@nebulario/core-cluster": "1.70.0-compose-plugin-v2-prod",
     "dotenv": "^6.2.0"
   },
