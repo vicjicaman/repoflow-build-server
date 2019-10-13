@@ -50,7 +50,7 @@
     "@nebulario/core-node": "1.70.1-master",
     "@nebulario/core-process": "1.70.1-master",
     "@nebulario/core-config": "1.70.4-master",
-    "@nebulario/core-cluster": "1.70.1-master",
+    "@nebulario/core-cluster": "link:./../core-cluster",
     "dotenv": "^6.2.0"
   },
   "peerDependencies": {}
