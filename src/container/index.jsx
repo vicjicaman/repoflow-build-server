@@ -1,145 +1,134 @@
 import path from "path";
 import _ from "lodash";
-import { spawn, exec } from "@nebulario/core-process";
-import * as Repository from "../utils/repository";
+import * as PublishRoutes from "../utils/routes";
+import { exec, retry, wait } from "@nebulario/core-process";
 
-export const type = "container";
-export const routes = async (app, cxt) => {
-  console.log("Register container test routes");
+const status = async (repositoryid, { fullname, version }, cxt) => {
+  let published = false;
 
-  app.post("/build/container", async (req, res) => {
-    console.log("Build request container!");
-    console.log(JSON.stringify(req.body, null, 2));
+  try {
+    await cxt.exec(
+      [
+        `DOCKER_CLI_EXPERIMENTAL=enabled docker manifest inspect ${fullname}:${version}`
+      ],
+      {
+        cwd: repositoryid
+      },
+      {},
+      cxt
+    );
+
+    published = true;
+  } catch (e) {
+    published = false;
+    cxt.logger.debug("container.status.manifest", { error: e.toString() });
+  }
+
+  return { published };
+};
+
+const build = async (
+  repositoryid,
+  { moduleid, mode, version, fullname, labels },
+  cxt
+) => {
+  await cxt.exec(
+    ["yarn install --ignore-scripts --production=true"],
+    {
+      cwd: repositoryid
+    },
+    {},
+    cxt
+  );
+
+  // --no-cache
+  await exec(
+    [
+      "docker build -t " +
+        fullname +
+        ":" +
+        version +
+        "  --build-arg CACHEBUST=$(date +%s) . "
+    ],
+    {
+      cwd: repositoryid
+    },
+    {},
+    cxt
+  );
+};
+
+const publish = async (
+  repositoryid,
+  { moduleid, mode, version, fullname, labels },
+  cxt
+) => {
+  const isAWS = !!_.find(labels, {
+    labelid: "aws"
+  });
+
+  if (isAWS) {
+    const awsout = await exec(
+      ["aws ecr get-login --no-include-email --region us-east-1"],
+      {
+        cwd: repositoryid
+      },
+      {},
+      cxt
+    );
+
+    await exec(
+      [awsout.stdout],
+      {
+        cwd: repositoryid
+      },
+      {},
+      cxt
+    );
 
     try {
-      const params = req.body;
-      const { moduleid, mode, version, fullname, labels } = params;
-
-      const { folder: repositoryFolder } = await Repository.init(
-        params,
+      const checkout = await exec(
+        ["aws ecr list-images --repository-name " + moduleid],
         {
-          type
-        },
-        cxt
-      );
-
-      console.log("INSTALL APP");
-      await exec(
-        ["yarn install --ignore-scripts --production=true"],
-        {
-          cwd: repositoryFolder
+          cwd: repositoryid
         },
         {},
         cxt
       );
-
-      console.log("BUILD IMAGE");
-      /*await exec(['docker build --no-cache -t ' + fullname + ':' + version + '  --build-arg CACHEBUST=$(date +%s) . '], {
-        cwd: repositoryFolder
-      }, {}, cxt);*/
-
-      const { promise, process } = spawn(
-        "docker",
-        [
-          "build",
-          "-t",
-          fullname + ":" + version,
-          "--build-arg",
-          "CACHEBUST=$(date +%s)",
-          "."
-        ],
-        { cwd: repositoryFolder },
-        { onOutput: ({ data }) => console.log(data) },
-        cxt
-      );
-
-      await promise;
-
-      console.log(labels);
-      const isAWS = !!_.find(labels, {
-        labelid: "aws"
-      });
-
-      if (isAWS) {
-        console.log("LOGIN IN AWS");
-        const awsout = await exec(
-          ["aws ecr get-login --no-include-email --region us-east-1"],
-          {
-            cwd: repositoryFolder
-          },
-          {},
-          cxt
-        );
-
-        const loginout = await exec(
-          [awsout.stdout],
-          {
-            cwd: repositoryFolder
-          },
-          {},
-          cxt
-        );
-
-        console.log("CHECK REPOSITORY IMAGE");
-        try {
-          const checkout = await exec(
-            ["aws ecr list-images --repository-name " + moduleid],
-            {
-              cwd: repositoryFolder
-            },
-            {},
-            cxt
-          );
-        } catch (e) {
-          if (e.message.includes("does not exist in the registry with id")) {
-            await exec(
-              ["aws ecr create-repository --repository-name " + moduleid],
-              {
-                cwd: repositoryFolder
-              },
-              {},
-              cxt
-            );
-          } else {
-            throw e;
-          }
-        }
-      }
-
-      console.log("PUSH IMAGE IN REPO");
-      console.log("docker push " + fullname + ":" + version);
-      const cmdout = await exec(
-        ["docker push " + fullname + ":" + version],
-        {
-          cwd: repositoryFolder
-        },
-        {},
-        cxt
-      );
-
-      console.log("START PUBLISH");
-      console.log(cmdout.stdout);
-      console.log(cmdout.stderr);
-      console.log("FINISH PUBLISH");
-
-      const repository = await Repository.publish(
-        params,
-        {
-          folder: repositoryFolder
-        },
-        cxt
-      );
-
-      res.json({
-        success: true,
-        message: "Container published"
-      });
     } catch (e) {
-      res.json({
-        error: e.toString()
-      });
-    } finally {
-      res.end();
+      if (e.message.includes("does not exist in the registry with id")) {
+        await exec(
+          ["aws ecr create-repository --repository-name " + moduleid],
+          {
+            cwd: repositoryid
+          },
+          {},
+          cxt
+        );
+      } else {
+        throw e;
+      }
     }
-  });
+  }
+
+  await exec(
+    ["docker push " + fullname + ":" + version],
+    {
+      cwd: repositoryid
+    },
+    {},
+    cxt
+  );
 };
+
+export const routes = (app, cxt) =>
+  PublishRoutes.register(
+    app,
+    "container",
+    {
+      status,
+      build,
+      publish
+    },
+    cxt
+  );

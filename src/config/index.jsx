@@ -1,61 +1,36 @@
-import path from 'path'
-import * as Repository from '../utils/repository'
-import {
-  exec,
-  retry,
-  wait
-} from '@nebulario/core-process';
-import * as Config from '@nebulario/core-config';
+import _ from "lodash";
+import path from "path";
+import { retry, wait } from "@nebulario/core-process";
+import * as Config from "@nebulario/core-config";
+import * as PublishRoutes from "../utils/routes";
 
-export const type = "config";
-export const routes = async (app, cxt) => {
-  console.log("Register config routes");
+const status = async (repositoryid, { fullname, version }, cxt) => {
+  return { published: true };
+};
 
-  app.post('/build/config', async (req, res) => {
-    console.log("Build request config!");
-    console.log(JSON.stringify(req.body, null, 2));
+const build = async (
+  repositoryid,
+  { moduleid, mode, version, fullname, labels },
+  cxt
+) => {
+  await Config.init(repositoryid);
+  Config.build(repositoryid);
+};
 
-    try {
-      const params = req.body;
+const publish = async (
+  repositoryid,
+  { moduleid, mode, version, fullname, labels },
+  cxt
+) => {};
 
-      const {
-        moduleid,
-        mode,
-        version,
-        fullname
-      } = params;
-
-      const {
-        folder: repositoryFolder
-      } = await Repository.init(params, {
-        type
-      }, cxt);
-
-
-      console.log("INIT CONFIG");
-      await Config.init(repositoryFolder);
-
-      console.log("BUILD CONFIG");
-      Config.build(repositoryFolder);
-
-      const repository = await Repository.publish(params, {
-        folder: repositoryFolder
-      }, cxt);
-
-
-      res.json({
-        success: true,
-        message: "Config repository published."
-      });
-    } catch (e) {
-      console.log("ERROR:" + e.toString());
-
-      res.json({
-        error: e.toString()
-      });
-    } finally {
-      res.end();
-    }
-  });
-
-}
+export const routes = (app, cxt) =>
+  PublishRoutes.register(
+    app,
+    "config",
+    {
+      status,
+      build,
+      publish
+    },
+    cxt
+  );
