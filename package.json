@@ -1,6 +1,6 @@
 {
   "name": "@nebulario/repoflow-build-server",
-  "version": "1.70.9-master",
+  "version": "1.70.0-build-server-base-prod",
   "description": "Base for modules in node",
   "main": "./dist/index.js",
   "repository": "github.com:vicjicaman/repoflow-build-server.git",
