@@ -14,10 +14,13 @@ const status = async (repositoryid, { fullname, version }, cxt) => {
     {},
     cxt
   );
-  const info = JSON.parse(versionsInfoString);
 
-  if (info.data.includes(version)) {
-    published = true;
+  if (versionsInfoString !== "") {
+    const info = JSON.parse(versionsInfoString);
+
+    if (info.data.includes(version)) {
+      published = true;
+    }
   }
 
   return { published };
@@ -57,6 +60,18 @@ const publish = async (
   });
 
   cxt.logger.debug("publish.npm", { isPublic });
+
+  if (isPublic) {
+    await cxt.exec(
+      ["npm access public " + fullname],
+      {
+        cwd: repositoryid
+      },
+      {},
+      cxt
+    );
+  }
+
   const out = await retry(
     async i =>
       await cxt.exec(
