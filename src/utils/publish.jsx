@@ -8,7 +8,7 @@ const uuidv4 = require("uuid/v4");
 export const register = (app, type, handler, cxt) => {
   cxt.logger.debug("register.build.routes", { type });
 
-  app.post("/types/" + type + "/status", async (req, res) => {
+  app.post("/types/" + type + "/publish/status", async (req, res) => {
     try {
       const params = req.body;
       const { operationid, version, fullname } = params;
@@ -57,7 +57,7 @@ export const register = (app, type, handler, cxt) => {
     }
   });
 
-  app.post("/types/" + type + "/publish", async (req, res) => {
+  app.post("/types/" + type + "/publish/start", async (req, res) => {
     try {
       const params = req.body;
       const { operationid: extOperationid, version, fullname } = params;
