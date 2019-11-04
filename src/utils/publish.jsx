@@ -61,11 +61,11 @@ export const register = (app, type, handler, cxt) => {
     try {
       const params = req.body;
       const { operationid: extOperationid, version, fullname } = params;
-      const key = fullname + "/" + version;
+      const key = type + "/" + fullname + "/" + version;
 
       cxt.logger.debug("build.route.request", { params });
 
-      let buildOp = Operation.get(extOperationid);
+      let buildOp = Operation.getByKey(key);
 
       if (!buildOp) {
         buildOp = Operation.start(

@@ -11,29 +11,23 @@ export const register = (app, type, handler, cxt) => {
   app.post("/types/" + type + "/deploy/status", async (req, res) => {
     try {
       const params = req.body;
-      const { operationid, version, fullname } = params;
-      const key = fullname + "/" + version;
+      const { deployOperationid } = params;
 
-      cxt.logger.debug("deploy.status.route.request", { type, params });
+      cxt.logger.debug("deploy.status.route.request", {
+        operationid: deployOperationid
+      });
 
-      const { repositoryid } = await Repository.init(
-        params,
-        {
-          type
-        },
-        cxt
-      );
-
-      const output = await handler.status(repositoryid, params, cxt);
+      const buildOp = Operation.get(deployOperationid);
+      const done = buildOp === null ? true : false;
 
       cxt.logger.debug("deploy.status.route.response", {
-        operationid,
-        deployment: output
+        operationid: deployOperationid,
+        done
       });
 
       res.json({
         output: {
-          deployment: output
+          done
         },
         error: null
       });
@@ -51,13 +45,14 @@ export const register = (app, type, handler, cxt) => {
     try {
       const params = req.body;
       const { operationid: extOperationid, version, fullname } = params;
-      const key = fullname + "/" + version;
+      const key = type + "/" + fullname + "/" + version;
 
       cxt.logger.debug("build.route.request", { params });
 
-      let buildOp = Operation.get(extOperationid);
+      let buildOp = Operation.getByKey(key);
 
       if (!buildOp) {
+        
         buildOp = Operation.start(
           key,
           async (params, cxt) => {

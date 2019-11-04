@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 import { createNode } from "@nebulario/core-node";
 import { Logger } from "@nebulario/core-logger";
 import { exec as coreExec } from "@nebulario/core-process";
+import * as JsonUtils from "@nebulario/core-json";
 
 import * as HandlerNPM from "./npm";
 import * as HandlerContainerNPM from "./container";
@@ -47,8 +48,19 @@ const cxt = {
       cxt.logger.error("exec.cmd.error", { cmds, error: e.toString(), opts });
       throw e;
     }
-  }
+  },
+  config: {}
 };
+
+const configPath = path.join(workspace, "config.json");
+if (fs.existsSync(configPath)) {
+  cxt.config = JsonUtils.load(configPath);
+}
+
+cxt.logger.debug("service", {
+  workspace,
+  config: cxt.config
+});
 
 const app = createNode(
   {
@@ -75,4 +87,6 @@ HandlerSite.routes(app, cxt);
 HandlerRealm.routes(app, cxt);
 
 const server = app.listen(service_port);
-console.log("Running server at " + service_port);
+cxt.logger.debug("service.running", {
+  port: service_port
+});

@@ -6,30 +6,44 @@ import * as JsonUtils from "@nebulario/core-json";
 import _ from "lodash";
 import * as DeployRoutes from "../utils/deploy";
 
-const status = async (repositoryid, { fullname, version }, cxt) => {
-  return { deployed: true };
-};
+const deploy = async (repositoryid, deployable, cxt) => {
+  const { moduleid, version, fullname, labels } = deployable;
+  const {
+    config: { cluster }
+  } = cxt;
 
-const deploy = async (
-  repositoryid,
-  { moduleid, version, fullname, labels },
-  cxt
-) => {
-  /*await Cluster.Tasks.Deploy.exec(
+  cxt.logger.debug("realm.deployment", {
     repositoryid,
-    { values },
+    moduleid,
+    version,
+    fullname,
+    labels
+  });
+
+  if (!cluster) {
+    throw new Error("cluster.config.error");
+  }
+
+  cxt.logger.debug("realm.deployment.cluster", { cluster });
+
+  await Cluster.Tasks.Deploy.exec(
+    repositoryid,
+    { deployable },
     {
       handlers: {
         error: ({ entity: { type, file } }, error, cxt) =>
-          cxt.logger.error("cluster.config.warning", {
+          cxt.logger.error("cluster.config.error", {
             type,
             file,
             error: error.toString()
           })
-      }
+      },
+      cluster
     },
     cxt
-  );*/
+  );
+
+  cxt.logger.debug("realm.deployment.cluster.done", {});
 };
 
 export const routes = (app, cxt) =>
@@ -37,7 +51,6 @@ export const routes = (app, cxt) =>
     app,
     "realm",
     {
-      status,
       deploy
     },
     cxt

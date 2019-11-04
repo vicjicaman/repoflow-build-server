@@ -16,6 +16,8 @@ export const start = (key, handler, params, cxt) => {
 
   const operationid = uuidv4();
 
+  cxt.logger.debug("operation.start", { key, operationid });
+
   operation = {
     operationid,
     key,
@@ -25,6 +27,7 @@ export const start = (key, handler, params, cxt) => {
     promise: null
   };
   OPERATION_KEY_INDEX[key] = operationid;
+  OPERATION_DATA[operationid] = operation;
 
   operation.promise = handler(params, { ...cxt, operation });
   operation.promise
@@ -42,6 +45,7 @@ export const start = (key, handler, params, cxt) => {
     .finally(() => {
       operation.status = "stop";
       delete OPERATION_KEY_INDEX[key];
+      delete OPERATION_DATA[operationid];
     });
 
   return operation;
