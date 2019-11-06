@@ -1,6 +1,8 @@
 import path from "path";
 import _ from "lodash";
 import * as PublishRoutes from "../utils/publish";
+import * as JsonUtils from "@nebulario/core-json";
+import * as Repository from "@nebulario/core-repository";
 import { exec, retry, wait } from "@nebulario/core-process";
 
 const status = async (repositoryid, { fullname, version }, cxt) => {
@@ -32,14 +34,49 @@ const build = async (
   { moduleid, mode, version, fullname, labels },
   cxt
 ) => {
-  await cxt.exec(
-    ["yarn install --ignore-scripts --production=true"],
-    {
-      cwd: repositoryid
-    },
-    {},
-    cxt
+  /**/
+
+  const containerDistFolder = path.join(repositoryid, "dist");
+  await cxt.exec([`mkdir -p ${containerDistFolder}`], {}, {}, cxt);
+
+  const sourceContent = JsonUtils.load(
+    path.join(repositoryid, "container.json")
   );
+  const { source } = sourceContent;
+
+
+  if (source.type === "npm") {
+    const packageJson = {
+      dependencies: {
+        [source.fullname]: source.version
+      }
+    };
+    JsonUtils.save(path.join(containerDistFolder, "package.json"), packageJson);
+
+    await cxt.exec(
+      ["yarn install --ignore-scripts --production=true"],
+      {
+        cwd: containerDistFolder
+      },
+      {},
+      cxt
+    );
+  }
+
+  if (source.type === "folder") {
+
+    try {
+      await Repository.clone(source.fullname, containerDistFolder);
+    } catch (e) {
+      const estr = e.toString();
+      cxt.logger.error("container.build.error", { error: e.toString() });
+      if (!estr.includes("already exists and is not an empty directory")) {
+        throw e;
+      }
+    }
+
+    await Repository.checkout(containerDistFolder, source.version);
+  }
 
   // --no-cache
   await exec(

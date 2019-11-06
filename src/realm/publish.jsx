@@ -2,7 +2,6 @@ import path from "path";
 import { exec, retry, wait } from "@nebulario/core-process";
 import * as Cluster from "@nebulario/core-cluster";
 import * as Config from "@nebulario/core-config";
-import * as JsonUtils from "@nebulario/core-json";
 import _ from "lodash";
 import * as PublishRoutes from "../utils/publish";
 
