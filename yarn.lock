@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@nebulario/core-cluster@link:../../../../../../../../../../../../data/iteration/workspace/workspaces/repoflow.com/instances/plugin-service/modules/core-cluster":
+"@nebulario/core-cluster@link:../../../common-cluster-deploy/modules/core-cluster":
   version "0.0.0"
   uid ""
 
@@ -55,10 +55,10 @@
     lodash "^4.17.4"
     uuid "^3.3.2"
 
-"@nebulario/core-remote@1.70.1-plugin-service-prod":
-  version "1.70.1-plugin-service-prod"
-  resolved "https://registry.yarnpkg.com/@nebulario/core-remote/-/core-remote-1.70.1-plugin-service-prod.tgz#ac5347298c2c2e3a59521de04dcd6badcdc7a5d9"
-  integrity sha512-qznB1sdNm+BwXb5H4byCJoM3hsnYmjuhIfFnqjQ4b6W3RDG+7/0O9q00TSgPeudoHR10T0i25q9ya3nMrS+Kvg==
+"@nebulario/core-remote@1.70.0-master":
+  version "1.70.0-master"
+  resolved "https://registry.yarnpkg.com/@nebulario/core-remote/-/core-remote-1.70.0-master.tgz#52c2126bb6a112b52323c90bffe7f439b89f4c27"
+  integrity sha512-9P0RTOU3YA6iA4RnLtkNGkSEpXUdkB7dOywoeqwhLH/kUnL1Xyw0n8+GBWcHNxymjEyYlNaShrxuu1flQNpY7A==
   dependencies:
     "@nebulario/core-json" "1.70.1-master"
     "@nebulario/core-process" "1.70.1-master"

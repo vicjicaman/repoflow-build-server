@@ -5,11 +5,11 @@ import { retry, wait } from "@nebulario/core-process";
 
 export const init = async (
   { folder: relativeFolder, moduleid, url, branchid },
-  { type },
+  { type, mode },
   cxt
 ) => {
   const { workspace } = cxt;
-  const folder = path.join(workspace, type, relativeFolder, moduleid);
+  const folder = path.join(workspace, mode, relativeFolder);
   const repositoryid = path.join(folder, "repository");
 
   if (!fs.existsSync(repositoryid)) {

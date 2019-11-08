@@ -19,7 +19,8 @@ export const register = (app, type, handler, cxt) => {
       const { repositoryid } = await Repository.init(
         params,
         {
-          type
+          type,
+          mode: "publish"
         },
         cxt
       );
@@ -74,7 +75,8 @@ export const register = (app, type, handler, cxt) => {
             const { repositoryid } = await Repository.init(
               params,
               {
-                type
+                type,
+                mode: "publish"
               },
               cxt
             );

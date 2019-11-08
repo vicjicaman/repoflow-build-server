@@ -51,7 +51,7 @@
     "@nebulario/core-process": "1.70.1-master",
     "@nebulario/core-config": "1.70.5-master",
     "@nebulario/core-repository": "1.70.1-master",
-    "@nebulario/core-cluster": "1.70.4-master",
+    "@nebulario/core-cluster": "link:/home/victor/repoflow/app/data/repoflow/workspace/workspaces/repoflow.com/instances/common-cluster-deploy/modules/core-cluster",
     "dotenv": "^6.2.0",
     "uuid": "^3.3.3"
   },
