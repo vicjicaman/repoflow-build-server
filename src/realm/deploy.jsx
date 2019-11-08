@@ -21,6 +21,10 @@ const deploy = async (repositoryid, deployable, cxt) => {
   });
 
   if (!cluster) {
+    cxt.logger.error("cluster.config.cluster.error", {
+      config: cxt.config,
+      workspace: cxt.workspace
+    });
     throw new Error("cluster.config.error");
   }
 

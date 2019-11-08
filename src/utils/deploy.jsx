@@ -52,14 +52,14 @@ export const register = (app, type, handler, cxt) => {
       let buildOp = Operation.getByKey(key);
 
       if (!buildOp) {
-        
         buildOp = Operation.start(
           key,
           async (params, cxt) => {
             const { repositoryid } = await Repository.init(
               params,
               {
-                type
+                type,
+                mode: "deploy"
               },
               cxt
             );
