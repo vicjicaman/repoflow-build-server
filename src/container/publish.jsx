@@ -36,16 +36,15 @@ const build = async (
 ) => {
   /**/
 
-  const containerDistFolder = path.join(repositoryid, "dist");
-  await cxt.exec([`mkdir -p ${containerDistFolder}`], {}, {}, cxt);
-
   const sourceContent = JsonUtils.load(
     path.join(repositoryid, "container.json")
   );
   const { source } = sourceContent;
 
-
   if (source.type === "npm") {
+    const containerDistFolder = path.join(repositoryid, "dist");
+    await cxt.exec([`mkdir -p ${containerDistFolder}`], {}, {}, cxt);
+
     const packageJson = {
       dependencies: {
         [source.fullname]: source.version
@@ -58,12 +57,14 @@ const build = async (
       {
         cwd: containerDistFolder
       },
-      {},
+      { progress: true },
       cxt
     );
   }
 
   if (source.type === "folder") {
+    const containerDistFolder = path.join(repositoryid, "dist", "folder");
+    await cxt.exec([`mkdir -p ${containerDistFolder}`], {}, {}, cxt);
 
     try {
       await Repository.clone(source.fullname, containerDistFolder);
@@ -90,7 +91,7 @@ const build = async (
     {
       cwd: repositoryid
     },
-    {},
+    { progress: true },
     cxt
   );
 };
@@ -153,7 +154,7 @@ const publish = async (
     {
       cwd: repositoryid
     },
-    {},
+    { progress: true },
     cxt
   );
 };
