@@ -1,6 +1,6 @@
 {
   "name": "@nebulario/repoflow-build-server",
-  "version": "1.70.11-master",
+  "version": "1.70.0-beta-public-build-prod",
   "description": "Base for modules in node",
   "main": "./dist/index.js",
   "repository": "github.com:vicjicaman/repoflow-build-server.git",
@@ -46,7 +46,7 @@
     "analyze": "webpack --config webpack.config.js --env.analyze"
   },
   "dependencies": {
-    "@nebulario/core-logger": "link:./../core-logger",
+    "@nebulario/core-logger": "1.70.0-beta-public-build-prod",
     "@nebulario/core-node": "1.70.1-master",
     "@nebulario/core-process": "1.70.1-master",
     "@nebulario/core-config": "1.70.5-master",
