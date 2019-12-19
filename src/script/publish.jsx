@@ -20,7 +20,7 @@ const publish = async (
 export const routes = (app, cxt) =>
   PublishRoutes.register(
     app,
-    "folder",
+    "script",
     {
       status,
       build,

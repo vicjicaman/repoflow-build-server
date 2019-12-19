@@ -14,22 +14,19 @@ import * as HandlerCompose from "./compose";
 import * as HandlerBundle from "./bundle";
 import * as HandlerConfig from "./config";
 import * as HandlerFolder from "./folder";
+import * as HandlerScript from "./script";
 import * as HandlerSite from "./site";
 import * as HandlerRealm from "./realm";
-
-//console.log(JSON.stringify(process.env, null, 2));
 
 const service_port = process.env.SERVICE_PORT || 8000;
 const workspace = path.join(process.env.REPOFLOW_WORKSPACE, "build");
 const env = process.env.NODE_ENV;
 
-//console.log("REPOFLOW_WORKSPACE: " + process.env.REPOFLOW_WORKSPACE);
-//console.log(workspace);
-
 const name = "build-server";
-const logPath = path.join(workspace, "logs");
-//console.log(logPath)
-const logger = Logger({ path: logPath, env });
+const logger = Logger({ path: path.join(workspace, "logs"), env });
+
+logger.info("env", { cwd: process.cwd(), pid: process.pid });
+
 const cxt = {
   workspace,
   logger,
@@ -37,16 +34,22 @@ const cxt = {
     try {
       const out = await coreExec(cmds, opts, hdls, cxt);
 
-      cxt.logger.debug("exec.cmd.output", {
+      const payload = {
         cmds,
         opts,
         output: out.stdout,
         warning: out.stderr
-      });
+      };
+
+      if (hdls.progress === true) {
+        cxt.logger.info("exec.cmd.output", payload);
+      } else {
+        cxt.logger.debug("exec.cmd.output", payload);
+      }
 
       return out;
     } catch (e) {
-      cxt.logger.error("exec.cmd.error", { cmds, error: e.toString(), opts });
+      cxt.logger.debug("exec.cmd.error", { cmds, error: e.toString(), opts });
       throw e;
     }
   },
@@ -85,6 +88,7 @@ HandlerCompose.routes(app, cxt);
 HandlerBundle.routes(app, cxt);
 HandlerConfig.routes(app, cxt);
 HandlerFolder.routes(app, cxt);
+HandlerScript.routes(app, cxt);
 HandlerSite.routes(app, cxt);
 HandlerRealm.routes(app, cxt);
 

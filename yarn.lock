@@ -40,10 +40,10 @@
   dependencies:
     yamljs "^0.3.0"
 
-"@nebulario/core-logger@1.70.2-master":
-  version "1.70.2-master"
-  resolved "https://registry.yarnpkg.com/@nebulario/core-logger/-/core-logger-1.70.2-master.tgz#d6775af417f5d16d0ab51ad44c8d7a305257adc7"
-  integrity sha512-giQY2YmBCprPVA+onHE7bf6PIt5Ol2jWiCrL44+Ft0N8CgNYPsPL/ISeuVR5x5B1JgiwmL0rPQqafwLI1+2Eaw==
+"@nebulario/core-logger@1.70.3-master":
+  version "1.70.3-master"
+  resolved "https://registry.yarnpkg.com/@nebulario/core-logger/-/core-logger-1.70.3-master.tgz#fd2252016be13813a8a33fa86de94cf70b2746f2"
+  integrity sha512-uocRGOA4WxEUQGGKGbrL/WAJG5vjbT5ccalntFjwNwFzfDQmXw6RQ4K2QYwXYCHrKb49JETY2bvH4Q9tDnRonQ==
   dependencies:
     babel-runtime "^6.26.0"
     winston "^3.2.0"

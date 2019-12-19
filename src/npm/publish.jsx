@@ -36,7 +36,7 @@ const build = async (
     {
       cwd: repositoryid
     },
-    {},
+    { progress: true },
     cxt
   );
 
@@ -45,7 +45,7 @@ const build = async (
     {
       cwd: repositoryid
     },
-    {},
+    { progress: true },
     cxt
   );
 };
@@ -59,17 +59,25 @@ const publish = async (
     labelid: "public"
   });
 
-  cxt.logger.debug("publish.npm", { isPublic });
+  cxt.logger.info("publish.npm", { isPublic });
 
   if (isPublic) {
-    await cxt.exec(
-      ["npm access public " + fullname],
-      {
-        cwd: repositoryid
-      },
-      {},
+    const { published } = await status(
+      repositoryid,
+      { fullname, version },
       cxt
     );
+
+    if (published) {
+      await cxt.exec(
+        ["npm access public " + fullname],
+        {
+          cwd: repositoryid
+        },
+        { progress: true },
+        cxt
+      );
+    }
   }
 
   const out = await retry(
@@ -83,10 +91,11 @@ const publish = async (
         {
           cwd: repositoryid
         },
-        {},
+        { progress: true },
         cxt
       ),
     (re, i, time) => {
+      cxt.logger.error("publish.npm.error", { error: re.stderr });
       if (
         re.code === 1 &&
         (re.stderr.includes("socket hang up") ||

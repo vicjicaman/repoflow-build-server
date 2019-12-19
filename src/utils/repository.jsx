@@ -78,7 +78,7 @@ export const publish = async (params, { repositoryid }, cxt) => {
   );
 
   if (fileStatus !== "") {
-    cxt.logger.debug("repository.artifact.changes", { files: fileStatus });
+    cxt.logger.info("repository.artifact.changes", { files: fileStatus });
 
     await cxt.exec(
       ["git add ."],
@@ -134,6 +134,10 @@ export const publish = async (params, { repositoryid }, cxt) => {
       {},
       cxt
     );
+
+    cxt.logger.info("repository.tag", {
+      tag
+    });
 
     return true;
   } else {

@@ -6,13 +6,15 @@ import * as Repository from "./repository";
 const uuidv4 = require("uuid/v4");
 
 export const register = (app, type, handler, cxt) => {
-  cxt.logger.debug("register.build.routes", { type });
+  cxt.logger.info("register.build.routes", { type });
 
   app.post("/types/" + type + "/publish/status", async (req, res) => {
     try {
       const params = req.body;
       const { operationid, version, fullname } = params;
-      const key = fullname + "/" + version;
+      const key = type + "/" + fullname + "/" + version;
+
+      let buildOp = Operation.getByKey(key);
 
       cxt.logger.debug("publish.status.route.request", { type, params });
 
@@ -36,13 +38,13 @@ export const register = (app, type, handler, cxt) => {
       );
 
       cxt.logger.debug("publish.status.route.response", {
-        operationid,
         deliverable: output,
         repository: repstatus
       });
 
       res.json({
         output: {
+          operationid: buildOp ? buildOp.operationid : null,
           deliverable: output,
           repository: repstatus
         },
@@ -82,7 +84,6 @@ export const register = (app, type, handler, cxt) => {
             );
 
             await handler.build(repositoryid, params, cxt);
-
             const res = await handler.publish(repositoryid, params, cxt);
 
             await Repository.publish(
