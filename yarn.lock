@@ -40,9 +40,13 @@
   dependencies:
     yamljs "^0.3.0"
 
-"@nebulario/core-logger@link:../core-logger":
-  version "0.0.0"
-  uid ""
+"@nebulario/core-logger@1.70.0-beta-public-build-prod":
+  version "1.70.0-beta-public-build-prod"
+  resolved "https://registry.yarnpkg.com/@nebulario/core-logger/-/core-logger-1.70.0-beta-public-build-prod.tgz#56a7be572c4e48b64b5ff0dc2988738306b83980"
+  integrity sha512-6/ExRk7iztxD3ZPZAWb1wlWz2/1ham8x0CWBfWWO7fhplzy7Gwk9ZWCtxVZsUQQIejfH8oAt+c/O6T4BsIZU6g==
+  dependencies:
+    babel-runtime "^6.26.0"
+    winston "^3.2.0"
 
 "@nebulario/core-node@1.70.1-master":
   version "1.70.1-master"
