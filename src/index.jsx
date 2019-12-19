@@ -14,6 +14,7 @@ import * as HandlerCompose from "./compose";
 import * as HandlerBundle from "./bundle";
 import * as HandlerConfig from "./config";
 import * as HandlerFolder from "./folder";
+import * as HandlerScript from "./script";
 import * as HandlerSite from "./site";
 import * as HandlerRealm from "./realm";
 
@@ -87,6 +88,7 @@ HandlerCompose.routes(app, cxt);
 HandlerBundle.routes(app, cxt);
 HandlerConfig.routes(app, cxt);
 HandlerFolder.routes(app, cxt);
+HandlerScript.routes(app, cxt);
 HandlerSite.routes(app, cxt);
 HandlerRealm.routes(app, cxt);
 
