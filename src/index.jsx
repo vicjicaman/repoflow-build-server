@@ -17,9 +17,12 @@ import * as HandlerFolder from "./folder";
 import * as HandlerScript from "./script";
 import * as HandlerSite from "./site";
 import * as HandlerRealm from "./realm";
+import * as FolderUtils from "PKG/core-folder";
 
 const service_port = process.env.SERVICE_PORT || 8000;
-const workspace = path.join(process.env.REPOFLOW_WORKSPACE, "build");
+const workspace = FolderUtils.resolveTilde(
+  path.join(process.env.REPOFLOW_WORKSPACE, "build")
+);
 const env = process.env.NODE_ENV;
 
 const name = "build-server";
