@@ -98,6 +98,9 @@ module.exports = (env = {}) => {
     },
     plugins,
     resolve: {
+      alias: {
+        PKG: path.resolve(__dirname, 'pkg')
+      },
       modules: [
         path.resolve(__dirname, 'src'),
         'node_modules'

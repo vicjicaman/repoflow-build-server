@@ -3,3 +3,4 @@ static
 service
 webpack.config.js
 .babelrc
+pkg
